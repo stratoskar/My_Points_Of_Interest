@@ -1,13 +1,12 @@
 package com.unipi.stratoskar.mypois;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
@@ -19,16 +18,18 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         setContentView(R.layout.activity_main);
 
         // define the SQLite database
-        db = openOrCreateDatabase("POIs.db",MODE_PRIVATE,null);
+        db = openOrCreateDatabase("poi.db",MODE_PRIVATE,null);
 
-        // create table
-        db.execSQL("Create table if not exists POIS("+
-                "Title TEXT," +
-                "Timestamp TEXT,"+
-                "Latitude TEXT PRIMARY KEY,"+
-                "Longtitude TEXT PRIMARY KEY,"+
-                "Category TEXT,"+
-                "Description TEXT)");
+        // create sql database
+        db.execSQL("Create table if not exists MYPOIS("+
+                "title TEXT,"+
+                "timestamp TEXT,"+
+                "longtitude TEXT PRIMARY KEY," +
+                "latitude TEXT," +
+                "category TEXT," +
+                "description TEXT)");
+
+
     }
 
     @Override
