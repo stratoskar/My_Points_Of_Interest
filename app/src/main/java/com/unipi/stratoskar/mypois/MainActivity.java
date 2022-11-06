@@ -28,9 +28,9 @@ public class MainActivity extends AppCompatActivity {
         db = openOrCreateDatabase("poi.db",MODE_PRIVATE,null);
 
         // create sql database
-        db.execSQL("Create table if not exists MYPOIS("+
-                "title TEXT PRIMARY KEY,"+
-                "timestamp TEXT,"+
+        db.execSQL("Create table if not exists MYPOI("+
+                "title TEXT,"+
+                "timestamp TEXT PRIMARY KEY,"+
                 "longtitude TEXT," +
                 "latitude TEXT," +
                 "category TEXT," +

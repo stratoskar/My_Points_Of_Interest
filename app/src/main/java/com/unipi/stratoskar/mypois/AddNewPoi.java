@@ -1,7 +1,10 @@
 package com.unipi.stratoskar.mypois;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -20,11 +23,12 @@ import java.util.Date;
 
 public class AddNewPoi extends AppCompatActivity implements LocationListener {
 
-    LocationManager locationManager;
-    String latitude, longitude;
-    EditText title,description;
-    RadioButton radioButton;
-    RadioGroup radioGroup;
+    private LocationManager locationManager;
+    private String latitude, longitude;
+    private EditText title,description;
+    private RadioButton radioButton;
+    private RadioGroup radioGroup;
+    private SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -35,19 +39,36 @@ public class AddNewPoi extends AppCompatActivity implements LocationListener {
         radioGroup=(RadioGroup)findViewById(R.id.radioGroup);
         title = (EditText)findViewById((R.id.editTextTextPersonName));
         description = (EditText)findViewById(R.id.editTextTextPersonName2);
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        // define the SQLite database
+        db = openOrCreateDatabase("poi.db",MODE_PRIVATE,null);
 
         // Grand access to location permissions
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},123);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 123);
             return;
         }
 
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
+        // Get current location of user
+        getLocation();
     }
 
-    // This method is called in order to add a new POI to database
+    /*
+    * Take current location of mobile phone
+    */
+    void getLocation() {
+        try {
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
+        }
+        catch(SecurityException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*
+     *This method is called in order to add a new POI to database
+     */
     public void addNewPOItoDatabase(View view)
     {
         // Gather POI's information
@@ -56,7 +77,24 @@ public class AddNewPoi extends AppCompatActivity implements LocationListener {
         String descriptionValue = description.getText().toString();
         String timestamp = getCurrentTimeStamp();
 
-        //Toast.makeText(this,timestamp+","+categoryValue+","+titleValue+","+descriptionValue,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,longitude+","+latitude+","+timestamp+","+categoryValue+","+titleValue+","+descriptionValue,Toast.LENGTH_SHORT).show();
+
+        try
+        {
+            db.execSQL("Insert into MYPOI Values(?,?,?,?,?,?)",new String[]{titleValue,timestamp,longitude,latitude,categoryValue,descriptionValue});
+            showMessage("Insert data:Success","Data Where Successfully inserted to database");
+        } catch (Exception e)
+        {
+            showMessage("Insert Data:Fail","There was a problem with data insertion!");
+        }
+    }
+
+    public void showMessage(String title, String text){
+        new AlertDialog.Builder(this)
+                .setCancelable(true)
+                .setTitle(title)
+                .setMessage(text)
+                .show();
     }
 
     /*
@@ -95,11 +133,19 @@ public class AddNewPoi extends AppCompatActivity implements LocationListener {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    /*
+    * Show message to user if he has not enabled GPS and/or Internet providers
+     */
+    @Override
+    public void onProviderDisabled(String provider) {
+        Toast.makeText(AddNewPoi.this, "Please Enable GPS and Internet", Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void onLocationChanged(@NonNull Location location) {
         latitude = String.valueOf(location.getLatitude());
         longitude = String.valueOf(location.getLongitude());
-        Toast.makeText(this,location.getLatitude()+" , "+location.getLongitude(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,location.getLatitude()+" , "+location.getLongitude(),Toast.LENGTH_SHORT).show();
     }
 }
 
