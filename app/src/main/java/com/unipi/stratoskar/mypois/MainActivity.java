@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    // View all POIS button
+    // View all POIs button
     public void view_all (View view){
         Intent intent = new Intent(this,ViewALL.class);
         startActivity(intent);
