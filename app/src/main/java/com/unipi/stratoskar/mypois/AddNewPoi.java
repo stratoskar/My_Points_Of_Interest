@@ -36,13 +36,6 @@ public class AddNewPoi extends AppCompatActivity implements LocationListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_new_poi);
 
-        radioGroup=(RadioGroup)findViewById(R.id.radioGroup);
-        title = (EditText)findViewById((R.id.editTextTextPersonName));
-        description = (EditText)findViewById(R.id.editTextTextPersonName2);
-
-        // define the SQLite database
-        db = openOrCreateDatabase("poi.db",MODE_PRIVATE,null);
-
         // Grand access to location permissions
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 123);
@@ -51,6 +44,13 @@ public class AddNewPoi extends AppCompatActivity implements LocationListener {
 
         // Get current location of user
         getLocation();
+
+        radioGroup=(RadioGroup)findViewById(R.id.radioGroup);
+        title = (EditText)findViewById((R.id.editTextTextPersonName));
+        description = (EditText)findViewById(R.id.editTextTextPersonName2);
+
+        // define the SQLite database
+        db = openOrCreateDatabase("poi.db",MODE_PRIVATE,null);
     }
 
     /*
@@ -59,7 +59,7 @@ public class AddNewPoi extends AppCompatActivity implements LocationListener {
     void getLocation() {
         try {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, this);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 1, this);
         }
         catch(SecurityException e) {
             e.printStackTrace();
@@ -77,19 +77,22 @@ public class AddNewPoi extends AppCompatActivity implements LocationListener {
         String descriptionValue = description.getText().toString();
         String timestamp = getCurrentTimeStamp();
 
-        Toast.makeText(this,longitude+","+latitude+","+timestamp+","+categoryValue+","+titleValue+","+descriptionValue,Toast.LENGTH_SHORT).show();
-
         try
         {
             db.execSQL("Insert into MYPOI Values(?,?,?,?,?,?)",new String[]{titleValue,timestamp,longitude,latitude,categoryValue,descriptionValue});
             showMessage("Insert data:Success","Data Where Successfully inserted to database");
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             showMessage("Insert Data:Fail","There was a problem with data insertion!");
         }
     }
 
-    public void showMessage(String title, String text){
+    /*
+     * Create a nice output message for the user
+     */
+    public void showMessage(String title, String text)
+    {
         new AlertDialog.Builder(this)
                 .setCancelable(true)
                 .setTitle(title)
