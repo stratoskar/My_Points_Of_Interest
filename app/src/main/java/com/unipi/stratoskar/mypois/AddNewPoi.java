@@ -82,7 +82,7 @@ public class AddNewPoi extends AppCompatActivity implements LocationListener {
             db.execSQL("Insert into MYPOI Values(?,?,?,?,?,?)",new String[]{titleValue,timestamp,longitude,latitude,categoryValue,descriptionValue});
             showMessage("Insert data:Success","Data where successfully inserted to database");
         }
-        catch (Exception e)
+        catch (Exception e) // problem with the database
         {
             showMessage("Insert data:Fail","There was a problem with data insertion!");
         }
@@ -93,16 +93,12 @@ public class AddNewPoi extends AppCompatActivity implements LocationListener {
      */
     public void showMessage(String title, String text)
     {
-        new AlertDialog.Builder(this)
-                .setCancelable(true)
-                .setTitle(title)
-                .setMessage(text)
-                .show();
+        new AlertDialog.Builder(this).setCancelable(true).setTitle(title).setMessage(text).show();
     }
 
     /*
-     * This method return the value of Radio Button that user selected.
-     * If no radio button was checked, then the method return's "Nothing Selected"
+     * This method returns the value of Radio Button that user selected.
+     * If no radio button was checked, then the method returns "Nothing Selected"
      */
     public String takeRadioButtonValue() {
         int selectedId = radioGroup.getCheckedRadioButtonId();
