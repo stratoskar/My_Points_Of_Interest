@@ -46,12 +46,12 @@ public class SearchPOI extends AppCompatActivity {
             if (cursor.getCount() > 0 )
             {
                 while (cursor.moveToNext()){
-                    builder.append("Title:").append(cursor.getString(0)).append("\n");
-                    builder.append("Timestamp:").append(cursor.getString(1)).append("\n");
-                    builder.append("Longitude:").append(cursor.getString(2)).append("\n");
-                    builder.append("Latitude:").append(cursor.getString(3)).append("\n");
-                    builder.append("Category:").append(cursor.getString(4)).append("\n");
-                    builder.append("Description:").append(cursor.getString(5)).append("\n");
+                    builder.append("Title: ").append(cursor.getString(0)).append("\n");
+                    builder.append("Timestamp: ").append(cursor.getString(1)).append("\n");
+                    builder.append("Longitude: ").append(cursor.getString(2)).append("\n");
+                    builder.append("Latitude: ").append(cursor.getString(3)).append("\n");
+                    builder.append("Category: ").append(cursor.getString(4)).append("\n");
+                    builder.append("Description: ").append(cursor.getString(5)).append("\n");
                 }
                 showMessage("Here are the results:",builder.toString());
             }
