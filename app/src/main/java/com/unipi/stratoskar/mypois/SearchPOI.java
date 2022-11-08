@@ -26,6 +26,10 @@ public class SearchPOI extends AppCompatActivity {
         addTitleToSearch = (EditText) findViewById(R.id.searchTitle);
     }
 
+    /*
+     * This method runs a SELECT query on the SQLite DB, in order
+     * to fetch the record needed!
+     */
     public void onClickSearchButton(View view)
     {
         // take user's  input
@@ -38,7 +42,7 @@ public class SearchPOI extends AppCompatActivity {
             db = openOrCreateDatabase("poi.db",MODE_PRIVATE,null);
 
             // Create the SELECT query
-            Cursor cursor = db.rawQuery("SELECT * FROM MYPOI where title = ?", new String[] {titleToBeSearched});
+            Cursor cursor = db.rawQuery("SELECT * FROM MYPOI where title ="+addTitleToSearch, null);
             StringBuilder builder = new StringBuilder();
             while (cursor.moveToNext()){
                 builder.append("Title:").append(cursor.getString(0)).append("\n");

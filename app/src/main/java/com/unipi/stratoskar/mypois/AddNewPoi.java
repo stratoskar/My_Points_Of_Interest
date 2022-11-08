@@ -45,7 +45,7 @@ public class AddNewPoi extends AppCompatActivity implements LocationListener {
         // Get current location of user
         getLocation();
 
-        radioGroup=(RadioGroup)findViewById(R.id.radioGroup);
+        radioGroup=(RadioGroup)findViewById(R.id.radioGroup23);
         title = (EditText)findViewById((R.id.editTextTextPersonName));
         description = (EditText)findViewById(R.id.editTextTextPersonName2);
 
@@ -80,11 +80,11 @@ public class AddNewPoi extends AppCompatActivity implements LocationListener {
         try
         {
             db.execSQL("Insert into MYPOI Values(?,?,?,?,?,?)",new String[]{titleValue,timestamp,longitude,latitude,categoryValue,descriptionValue});
-            showMessage("Insert data:Success","Data Where Successfully inserted to database");
+            showMessage("Insert data:Success","Data where successfully inserted to database");
         }
         catch (Exception e)
         {
-            showMessage("Insert Data:Fail","There was a problem with data insertion!");
+            showMessage("Insert data:Fail","There was a problem with data insertion!");
         }
     }
 
