@@ -25,13 +25,16 @@ public class DeletePOI extends AppCompatActivity {
         deleteButton = (Button)findViewById((R.id.button7));
     }
 
+    /*
+     * This method deletes a row given the title of the POI
+     */
     public void onClickDeleteButton(View view)
     {
 
         String titleToBeDeleted = addTitle.getText().toString();
         String table_name = "MYPOI";
 
-        // Delete row from database
+        // Delete record from database
         try
         {
             db = openOrCreateDatabase("poi.db",MODE_PRIVATE,null);
@@ -41,10 +44,10 @@ public class DeletePOI extends AppCompatActivity {
             }
             else
             {
-                showMessage("Deletion: Fail","Failed to delete the row!");
+                showMessage("Deletion: Fail","There is no record with this title!");
             }
         }
-        catch (Exception e)
+        catch (Exception e) // problem with the database
         {
             showMessage("Error","There was an error. Please try again later!");
         }
@@ -55,10 +58,6 @@ public class DeletePOI extends AppCompatActivity {
      */
     public void showMessage(String title, String text)
     {
-        new AlertDialog.Builder(this)
-                .setCancelable(true)
-                .setTitle(title)
-                .setMessage(text)
-                .show();
+        new AlertDialog.Builder(this).setCancelable(true).setTitle(title).setMessage(text).show();
     }
 }

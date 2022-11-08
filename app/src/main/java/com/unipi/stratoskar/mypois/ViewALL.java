@@ -16,10 +16,15 @@ public class ViewALL extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.view_all);
+
         // define the SQLite database
         db = openOrCreateDatabase("poi.db",MODE_PRIVATE,null);
+
+        // Run a SELECT query to fetch all the data in database
         Cursor cursor = db.rawQuery("Select * from MYPOI",null);
+
         StringBuilder builder = new StringBuilder();
+
         while (cursor.moveToNext()){
             builder.append("Title:").append(cursor.getString(0)).append("\n");
             builder.append("Timestamp:").append(cursor.getString(1)).append("\n");
@@ -28,14 +33,13 @@ public class ViewALL extends AppCompatActivity {
             builder.append("Category:").append(cursor.getString(4)).append("\n");
             builder.append("Description:").append(cursor.getString(5)).append("\n");
         }
-        showMessage("POIS",builder.toString());
+        showMessage("View all the POIs:",builder.toString());
     }
 
+    /*
+     * Create a nice output message for the user
+     */
     public void showMessage(String title, String text){
-        new AlertDialog.Builder(this)
-                .setCancelable(true)
-                .setTitle(title)
-                .setMessage(text)
-                .show();
+        new AlertDialog.Builder(this).setCancelable(true).setTitle(title).setMessage(text).show();
     }
 }

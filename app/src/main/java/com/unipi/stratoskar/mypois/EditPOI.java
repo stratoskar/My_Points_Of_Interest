@@ -31,12 +31,11 @@ public class EditPOI extends AppCompatActivity {
     }
 
     /*
-     *This method is called in order to add a new POI to database
+     *This method is called in order to edit an existing POI in database
      */
     public void EditNewPOItoDatabase(View view)
     {
         // Gather POI's information
-
         String categoryValue = takeRadioButtonValue();
         String oldTitleValue = oldTitle.getText().toString();
         String newTitleValue = newTitle.getText().toString();
@@ -48,15 +47,13 @@ public class EditPOI extends AppCompatActivity {
         {
             db = openOrCreateDatabase("poi.db",MODE_PRIVATE,null);
 
-            ContentValues values = new ContentValues();
             // on below line we are passing all values
             // along with its key and value pair.
+            ContentValues values = new ContentValues();
             values.put("title", newTitleValue);
             values.put("category", categoryValue);
             values.put("description", descriptionValue);
 
-            // on below line we are calling a update method to update our database and passing our values.
-            // and we are comparing it with name of our course which is stored in original name variable.
             if(db.update(table_name, values, "title=?", new String[]{oldTitleValue}) > 0)
             {
                 showMessage("Update data: Success", "Record where successfully updated!");
@@ -66,7 +63,7 @@ public class EditPOI extends AppCompatActivity {
                 showMessage("Update data: No result","No record was affected!");
             }
         }
-        catch (Exception e)
+        catch (Exception e) // problem with the database
         {
             showMessage("Update data: Fail","There was a problem with data updating!");
         }
@@ -81,8 +78,8 @@ public class EditPOI extends AppCompatActivity {
     }
 
     /*
-     * This method return the value of Radio Button that user selected.
-     * If no radio button was checked, then the method return's "Nothing Selected".
+     * This method returns the value of Radio Button that user selected.
+     * If no radio button was checked, then the method returns "Nothing Selected".
      */
     public String takeRadioButtonValue() {
         int selectedId = radioGroup.getCheckedRadioButtonId();

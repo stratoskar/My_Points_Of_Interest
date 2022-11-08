@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SearchPOI extends AppCompatActivity {
 
-    Button search;
     EditText addTitleToSearch;
     SQLiteDatabase db;
 
@@ -22,7 +21,6 @@ public class SearchPOI extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search_poi);
 
-        search = (Button)findViewById(R.id.searchButton);
         addTitleToSearch = (EditText) findViewById(R.id.searchTitle);
     }
 
@@ -35,26 +33,34 @@ public class SearchPOI extends AppCompatActivity {
         // take user's  input
         String titleToBeSearched = addTitleToSearch.getText().toString();
 
-        // Search to the database
+        // Search to the database and find the record that matched with the title that user inserted
         try
         {
             // define the SQLite database
             db = openOrCreateDatabase("poi.db",MODE_PRIVATE,null);
 
             // Create the SELECT query
-            Cursor cursor = db.rawQuery("SELECT * FROM MYPOI where title ="+addTitleToSearch, null);
+            Cursor cursor= db.rawQuery("SELECT * FROM MYPOI WHERE title=?", new String[] { String.valueOf(titleToBeSearched) });
+
             StringBuilder builder = new StringBuilder();
-            while (cursor.moveToNext()){
-                builder.append("Title:").append(cursor.getString(0)).append("\n");
-                builder.append("Timestamp:").append(cursor.getString(1)).append("\n");
-                builder.append("Longitude:").append(cursor.getString(2)).append("\n");
-                builder.append("Latitude:").append(cursor.getString(3)).append("\n");
-                builder.append("Category:").append(cursor.getString(4)).append("\n");
-                builder.append("Description:").append(cursor.getString(5)).append("\n");
+            if (cursor.getCount() > 0 )
+            {
+                while (cursor.moveToNext()){
+                    builder.append("Title:").append(cursor.getString(0)).append("\n");
+                    builder.append("Timestamp:").append(cursor.getString(1)).append("\n");
+                    builder.append("Longitude:").append(cursor.getString(2)).append("\n");
+                    builder.append("Latitude:").append(cursor.getString(3)).append("\n");
+                    builder.append("Category:").append(cursor.getString(4)).append("\n");
+                    builder.append("Description:").append(cursor.getString(5)).append("\n");
+                }
+                showMessage("Here are the results:",builder.toString());
             }
-            showMessage("Here are the results:",builder.toString());
+            else
+            {
+                showMessage("No records found","There are no records with this title in the database!");
+            }
         }
-        catch (Exception e)
+        catch (Exception e) // problem with the database occured
         {
             showMessage("Error","There was an error. Please try again later!");
         }
@@ -65,10 +71,6 @@ public class SearchPOI extends AppCompatActivity {
      */
     public void showMessage(String title, String text)
     {
-        new AlertDialog.Builder(this)
-                .setCancelable(true)
-                .setTitle(title)
-                .setMessage(text)
-                .show();
+        new AlertDialog.Builder(this).setCancelable(true).setTitle(title).setMessage(text).show();
     }
 }
