@@ -47,7 +47,7 @@
         android:layout_marginBottom="30dp"
         android:editable="true"
         android:ems="10"
-        android:hint="New descritpion"
+        android:hint="New description"
         android:inputType="textPersonName"
         android:textAlignment="viewStart"
         android:textColor="@color/white"

@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
         db.execSQL("Create table if not exists MYPOI("+
                 "title TEXT PRIMARY KEY,"+
                 "timestamp TEXT,"+
-                "longtitude TEXT," +
+                "longitude TEXT," +
                 "latitude TEXT," +
                 "category TEXT," +
                 "description TEXT)");
